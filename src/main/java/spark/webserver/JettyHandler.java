@@ -31,6 +31,7 @@ import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 
+import spark.route.RouteMatcherFactory;
 import spark.utils.IOUtils;
 
 /**
@@ -38,14 +39,16 @@ import spark.utils.IOUtils;
  *
  * @author Per Wendel
  */
-class JettyHandler extends SessionHandler {
+public class JettyHandler extends SessionHandler {
 
     private static final Logger LOG = Log.getLogger(JettyHandler.class);
 
     private Filter filter;
 
-    public JettyHandler(Filter filter) {
-        this.filter = filter;
+    public JettyHandler() {
+        MatcherFilter matcherFilter = new MatcherFilter(RouteMatcherFactory.get(), false);
+        matcherFilter.init(null);
+    	this.filter = matcherFilter;
     }
 
     @Override

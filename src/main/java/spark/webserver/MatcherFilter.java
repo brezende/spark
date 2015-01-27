@@ -53,7 +53,6 @@ public class MatcherFilter implements Filter {
 
     private SimpleRouteMatcher routeMatcher;
     private boolean isServletContext;
-    private boolean hasOtherHandlers;
 
     /**
      * The logger.
@@ -65,12 +64,10 @@ public class MatcherFilter implements Filter {
      *
      * @param routeMatcher     The route matcher
      * @param isServletContext If true, chain.doFilter will be invoked if request is not consumed by Spark.
-     * @param hasOtherHandlers If true, do nothing if request is not consumed by Spark in order to let others handlers process the request.
      */
-    public MatcherFilter(SimpleRouteMatcher routeMatcher, boolean isServletContext, boolean hasOtherHandlers) {
+    public MatcherFilter(SimpleRouteMatcher routeMatcher, boolean isServletContext) {
         this.routeMatcher = routeMatcher;
         this.isServletContext = isServletContext;
-        this.hasOtherHandlers = hasOtherHandlers;
     }
 
     public void init(FilterConfig filterConfig) {
@@ -221,7 +218,7 @@ public class MatcherFilter implements Filter {
 
         boolean consumed = bodyContent != null;
 
-        if (!consumed && hasOtherHandlers) {
+        if (!consumed) {
             throw new NotConsumedException();
         }
 
