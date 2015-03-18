@@ -9,11 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import spark.util.SparkTestUtil;
 
-import static spark.Spark.after;
-import static spark.Spark.before;
-import static spark.Spark.post;
-
 public class BodyAvailabilityTest {
+	private static Spark spark;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BodyAvailabilityTest.class);
 
@@ -27,7 +24,7 @@ public class BodyAvailabilityTest {
 
     @AfterClass
     public static void tearDown() {
-        Spark.stop();
+        spark.stop();
 
         beforeBody = null;
         routeBody = null;
@@ -37,29 +34,30 @@ public class BodyAvailabilityTest {
     @BeforeClass
     public static void setup() {
         LOGGER.debug("setup()");
-
+        spark = new Spark();
         testUtil = new SparkTestUtil(4567);
 
         beforeBody = null;
         routeBody = null;
         afterBody = null;
 
-        before("/hello", (req, res) -> {
+        spark.before("/hello", (req, res) -> {
             LOGGER.debug("before-req.body() = " + req.body());
             beforeBody = req.body();
         });
 
-        post("/hello", (req, res) -> {
+        spark.post("/hello", (req, res) -> {
             LOGGER.debug("get-req.body() = " + req.body());
             routeBody = req.body();
             return req.body();
         });
 
-        after("/hello", (req, res) -> {
+        spark.after("/hello", (req, res) -> {
             LOGGER.debug("after-before-req.body() = " + req.body());
             afterBody = req.body();
         });
 
+        spark.init();
         try {
             Thread.sleep(500);
         } catch (Exception e) {

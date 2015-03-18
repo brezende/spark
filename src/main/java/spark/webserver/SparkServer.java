@@ -16,9 +16,7 @@
  */
 package spark.webserver;
 
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.xml.XmlConfiguration;
 import org.slf4j.Logger;
@@ -41,18 +39,9 @@ public class SparkServer {
     }
 
     public void ignite() {
-
-    	Server server = new Server();
-    	ServerConnector connector = new ServerConnector(server);
-    	connector.setPort(8080);
-    	Connector[] connectors = new Connector[]{connector};
-    	server.setConnectors(connectors);
-    	JettyHandler handler = new JettyHandler();
-    	server.setHandler(handler);
-    	
-		try {
-			Resource fileserver_xml = Resource.newSystemResource("spark_jetty.xml");
-	        XmlConfiguration configuration = new XmlConfiguration(fileserver_xml.getInputStream());
+    	try {
+			Resource confXML = Resource.newSystemResource("spark_jetty.xml");
+	        XmlConfiguration configuration = new XmlConfiguration(confXML.getInputStream());
 	        server = (Server)configuration.configure();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

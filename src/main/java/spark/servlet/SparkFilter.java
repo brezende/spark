@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import spark.Access;
 import spark.resource.AbstractFileResolvingResource;
 import spark.resource.AbstractResourceHandler;
 import spark.resource.ClassPathResource;
@@ -65,7 +64,7 @@ public class SparkFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        Access.runFromServlet();
+        //Access.runFromServlet();
 
         final SparkApplication application = getApplication(filterConfig);
         application.init();

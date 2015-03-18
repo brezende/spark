@@ -16,15 +16,10 @@
  */
 package spark.examples.filter;
 
-import static spark.Spark.after;
-import static spark.Spark.get;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spark.Filter;
-import spark.Request;
-import spark.Response;
-import spark.Route;
+
+import spark.Spark;
 
 /**
  * Example showing the use of attributes
@@ -36,18 +31,19 @@ public class FilterExampleAttributes {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterExampleAttributes.class);
 
     public static void main(String[] args) {
-        get("/hi", (request, response) -> {
+        Spark spark = new Spark();
+        spark.get("/hi", (request, response) -> {
             request.attribute("foo", "bar");
             return null;
         });
 
-        after("/hi", (request, response) -> {
+        spark.after("/hi", (request, response) -> {
             for (String attr : request.attributes()) {
                 LOGGER.info("attr: " + attr);
             }
         });
 
-        after("/hi", (request, response) -> {
+        spark.after("/hi", (request, response) -> {
             Object foo = request.attribute("foo");
             response.body(asXml("foo", foo));
         });

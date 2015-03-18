@@ -3,8 +3,6 @@ package spark;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static spark.Spark.after;
-import static spark.Spark.before;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +22,7 @@ import spark.examples.books.Books;
 import spark.utils.IOUtils;
 
 public class BooksIntegrationTest {
-
+	private static Spark spark;
     private static int PORT = 4567;
 
     private static String AUTHOR = "FOO";
@@ -35,7 +33,7 @@ public class BooksIntegrationTest {
 
     @AfterClass
     public static void tearDown() {
-        Spark.stop();
+        spark.stop();
     }
 
     @After
@@ -45,16 +43,18 @@ public class BooksIntegrationTest {
 
     @BeforeClass
     public static void setup() {
-        before((request, response) -> {
+    	spark = new Spark();
+    	spark.before((request, response) -> {
             response.header("FOZ", "BAZ");
         });
 
-        Books.main(null);
+        Books.callMain(spark);
 
-        after((request, response) -> {
+        spark.after((request, response) -> {
             response.header("FOO", "BAR");
         });
 
+        spark.init();
         try {
             Thread.sleep(500);
         } catch (Exception e) {
@@ -132,7 +132,8 @@ public class BooksIntegrationTest {
 
     @Test
     public void canDeleteBook() {
-        bookId = createBookViaPOST().body.trim();
+        String body = createBookViaPOST().body;
+		bookId = body.trim();
 
         UrlResponse response = doMethod("DELETE", "/books/" + bookId, null);
 

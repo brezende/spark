@@ -1,8 +1,5 @@
 package spark;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import spark.route.RouteMatcherFactory;
 import spark.route.SimpleRouteMatcher;
 import spark.webserver.SparkServer;
@@ -11,18 +8,17 @@ import spark.webserver.SparkServer;
  * Spark base class
  */
 public abstract class SparkBase {
-    protected static boolean initialized = false;
+    protected boolean initialized = false;
 
     protected static final String DEFAULT_ACCEPT_TYPE = "*/*";
 
-    protected static SparkServer server;
-    protected static SimpleRouteMatcher routeMatcher = RouteMatcherFactory.get();
-    private static boolean runFromServlet;
+    protected SparkServer server;
+    protected SimpleRouteMatcher routeMatcher = RouteMatcherFactory.get();
 
     /**
      * Stops the Spark server and clears all routes
      */
-    public static synchronized void stop() {
+    public synchronized void stop() {
         if (server != null) {
             routeMatcher.clearRoutes();
             server.stop();
@@ -30,8 +26,7 @@ public abstract class SparkBase {
         initialized = false;
     }
 
-    static synchronized void runFromServlet() {
-        runFromServlet = true;
+    synchronized void runFromServlet() {
         if (!initialized) {
             routeMatcher = RouteMatcherFactory.get();
             initialized = true;
@@ -45,7 +40,7 @@ public abstract class SparkBase {
      * @param route the route
      * @return the wrapped route
      */
-    protected static RouteImpl wrap(final String path, final Route route) {
+    protected RouteImpl wrap(final String path, final Route route) {
         return wrap(path, DEFAULT_ACCEPT_TYPE, route);
     }
 
@@ -57,7 +52,7 @@ public abstract class SparkBase {
      * @param route      the route
      * @return the wrapped route
      */
-    protected static RouteImpl wrap(final String path, String acceptType, final Route route) {
+    protected RouteImpl wrap(final String path, String acceptType, final Route route) {
         if (acceptType == null) {
             acceptType = DEFAULT_ACCEPT_TYPE;
         }
@@ -77,7 +72,7 @@ public abstract class SparkBase {
      * @param filter the filter
      * @return the wrapped route
      */
-    protected static FilterImpl wrap(final String path, final Filter filter) {
+    protected FilterImpl wrap(final String path, final Filter filter) {
         return wrap(path, DEFAULT_ACCEPT_TYPE, filter);
     }
 
@@ -89,7 +84,7 @@ public abstract class SparkBase {
      * @param filter     the filter
      * @return the wrapped route
      */
-    protected static FilterImpl wrap(final String path, String acceptType, final Filter filter) {
+    protected FilterImpl wrap(final String path, String acceptType, final Filter filter) {
         if (acceptType == null) {
             acceptType = DEFAULT_ACCEPT_TYPE;
         }
@@ -102,17 +97,17 @@ public abstract class SparkBase {
         return impl;
     }
 
-    protected static void addRoute(String httpMethod, RouteImpl route) {
+    protected void addRoute(String httpMethod, RouteImpl route) {
         routeMatcher.parseValidateAddRoute(httpMethod + " '" + route.getPath()
                                                    + "'", route.getAcceptType(), route);
     }
 
-    protected static void addFilter(String httpMethod, FilterImpl filter) {
+    protected void addFilter(String httpMethod, FilterImpl filter) {
         routeMatcher.parseValidateAddRoute(httpMethod + " '" + filter.getPath()
                                                    + "'", filter.getAcceptType(), filter);
     }
 
-    public static synchronized void init() {
+    public synchronized void init() {
         if (!initialized) {
             new Thread(new Runnable() {
                 @Override

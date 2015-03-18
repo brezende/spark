@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+	<Arg>
+		<New class="org.eclipse.jetty.util.thread.QueuedThreadPool">
+			<Arg name="maxThreads" type="int">400</Arg>
+			<Arg name="minThreads" type="int">10</Arg>
+			<Arg name="idleTimeout" type="int">6000</Arg>
+			<Arg name="queue">
+				<New class="java.util.concurrent.ArrayBlockingQueue">
+					<Arg type="int">6000</Arg>
+				</New>
+			</Arg>
+		</New>
+	</Arg>
+	<Set name="connectors">
+		<Array type="org.eclipse.jetty.server.Connector">
+			<Item>
+				<New class="org.eclipse.jetty.server.ServerConnector">
+					<Arg>
+						<Ref refid="Server" />
+					</Arg>
+					<Arg></Arg>
+					<Arg></Arg>
+					<Arg></Arg>
+					<Arg name="acceptors" type="int">4</Arg>
+					<Arg name="selectors" type="int">0</Arg>
+					<Arg name="factories">
+						<Array type="org.eclipse.jetty.server.ConnectionFactory">
+							<Item>
+								<New class="org.eclipse.jetty.server.HttpConnectionFactory">
+								</New>
+							</Item>
+						</Array>
+					</Arg>
+					<Set name="port">
+						<SystemProperty name="http_port" default="4567" />
+					</Set>
+				</New>
+			</Item>
+		</Array>
+	</Set>
+	<Set name="handler">
+		<New class="spark.webserver.JettyHandler">
+		</New>
+	</Set>
+	<Call name="addBean">
+		<Arg>
+			<New class="org.eclipse.jetty.server.LowResourceMonitor">
+				<Arg name="server">
+					<Ref refid='Server' />
+				</Arg>
+				<Set name="period">
+					<Property name="lowresources.period" default="1000" />
+				</Set>
+				<Set name="lowResourcesIdleTimeout">
+					<Property name="lowresources.lowResourcesIdleTimeout"
+						default="200" />
+				</Set>
+				<Set name="monitorThreads">
+					<Property name="lowresources.monitorThreads" default="true" />
+				</Set>
+				<Set name="maxConnections">
+					<Property name="lowresources.maxConnections" default="0" />
+				</Set>
+				<Set name="maxMemory">
+					<Property name="lowresources.maxMemory" default="0" />
+				</Set>
+				<Set name="maxLowResourcesTime">
+					<Property name="lowresources.maxLowResourcesTime" default="5000" />
+				</Set>
+			</New>
+		</Arg>
+	</Call>
+</Configure>
