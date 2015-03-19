@@ -10,5 +10,4 @@ public class TransformerExample {
             return new MyMessage("Hello World");
         }, new JsonTransformer());
     }
-
 }
