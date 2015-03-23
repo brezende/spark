@@ -62,7 +62,7 @@ public abstract class TemplateViewRouteImpl extends RouteImpl {
             }
 
             @Override
-            public Object handle(Request request, Response response) throws Exception {
+            public Object handle(Request request, Response response) {
                 return route.handle(request, response);
             }
         };

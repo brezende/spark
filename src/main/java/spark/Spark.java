@@ -36,7 +36,7 @@ import spark.utils.SparkUtils;
  *
  * @author Per Wendel
  */
-public final class Spark extends SparkBase {
+public class Spark extends SparkBase {
     // Hide constructor
     public Spark() {
     }

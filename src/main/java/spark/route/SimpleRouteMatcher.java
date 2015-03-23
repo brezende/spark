@@ -122,6 +122,10 @@ public class SimpleRouteMatcher {
         routes.clear();
     }
 
+    public List<RouteEntry> getRoutes() {
+    	return this.routes;
+    }
+    
     //////////////////////////////////////////////////
     // PRIVATE METHODS
     //////////////////////////////////////////////////

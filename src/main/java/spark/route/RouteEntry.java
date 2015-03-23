@@ -7,12 +7,12 @@ import spark.utils.SparkUtils;
 /**
  * Created by Per Wendel on 2014-05-10.
  */
-class RouteEntry {
+public class RouteEntry {
 
-    HttpMethod httpMethod;
-    String path;
-    String acceptedType;
-    Object target;
+	public HttpMethod httpMethod;
+    public String path;
+    public String acceptedType;
+    public Object target;
 
     boolean matches(HttpMethod httpMethod, String path) {
         if ((httpMethod == HttpMethod.before || httpMethod == HttpMethod.after)

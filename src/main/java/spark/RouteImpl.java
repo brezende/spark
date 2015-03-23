@@ -57,9 +57,8 @@ public abstract class RouteImpl implements Route {
      * @param request  The request object providing information about the HTTP request
      * @param response The response object providing functionality for modifying the response
      * @return The content to be set in the response
-     * @throws java.lang.Exception when handle fails
      */
-    public abstract Object handle(Request request, Response response) throws Exception;
+    public abstract Object handle(Request request, Response response);
 
     /**
      * This method should render the given element into something that can be send through Response element.

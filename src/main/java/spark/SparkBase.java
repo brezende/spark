@@ -10,7 +10,7 @@ import spark.webserver.SparkServer;
 public abstract class SparkBase {
     protected boolean initialized = false;
 
-    protected static final String DEFAULT_ACCEPT_TYPE = "*/*";
+    public static final String DEFAULT_ACCEPT_TYPE = "*/*";
 
     protected SparkServer server;
     protected SimpleRouteMatcher routeMatcher = RouteMatcherFactory.get();
@@ -33,6 +33,10 @@ public abstract class SparkBase {
         }
     }
 
+    public SimpleRouteMatcher getRouteMatcher() {
+    	return this.routeMatcher;
+    }
+    
     /**
      * Wraps the route in RouteImpl
      *
@@ -58,7 +62,7 @@ public abstract class SparkBase {
         }
         RouteImpl impl = new RouteImpl(path, acceptType) {
             @Override
-            public Object handle(Request request, Response response) throws Exception {
+            public Object handle(Request request, Response response) {
                 return route.handle(request, response);
             }
         };
