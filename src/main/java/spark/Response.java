@@ -170,7 +170,7 @@ public class Response {
      *                zero - deletes the cookie)
      */
     public void cookie(String name, String value, int maxAge, boolean secured) {
-        cookie("", name, value, maxAge, secured);
+        cookie(null, "", name, value, maxAge, secured);
     }
 
     /**
@@ -183,11 +183,14 @@ public class Response {
      * @param secured if true : cookie will be secured
      *                zero - deletes the cookie)
      */
-    public void cookie(String path, String name, String value, int maxAge, boolean secured) {
+    public void cookie(String domain, String path, String name, String value, int maxAge, boolean secured) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath(path);
         cookie.setMaxAge(maxAge);
         cookie.setSecure(secured);
+        if (domain != null) {
+        	cookie.setDomain(domain);
+        }
         response.addCookie(cookie);
     }
 
