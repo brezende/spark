@@ -31,8 +31,21 @@
 	<properties>
 		<jetty.version>9.0.2.v20130417</jetty.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<nexus.repo>http://dev06c6.srv.office:8081</nexus.repo>
 	</properties>
 
+	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<name>releases repo</name>
+			<url>${nexus.repo}/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus</id>
+			<name>snapshots repo</name>
+			<url>${nexus.repo}/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<dependencies>
 		<!-- LOGGING DEPENDENCIES -->
 		<dependency>

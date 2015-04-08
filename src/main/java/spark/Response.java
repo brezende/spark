@@ -176,6 +176,7 @@ public class Response {
     /**
      * Adds cookie to the response. Can be invoked multiple times to insert more than one cookie.
      *
+     * @param domain  domain of the cookie
      * @param path    path of the cookie
      * @param name    name of the cookie
      * @param value   value of the cookie
